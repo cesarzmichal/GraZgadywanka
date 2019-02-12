@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,28 +22,61 @@ namespace ConsoleAppZgadywanka
             Console.WriteLine(wylosowana);
             Console.WriteLine("Wylosowałem liczbę od 1 do 100 \n odgadnij ją");
 
+            Stopwatch stopper = Stopwatch.StartNew();
+            int licznik = 0;
+            bool trafiono = false;
+
+            
             //Dopóki nie trafiono
-            // 2. Człowiek podaje propozycję
-            Console.Write("Podaj propozycję: ");
-            int propozycja = Convert.ToInt32(Console.ReadLine());
+            while (!trafiono)
+            {
+                int propozycja = 0;
 
-            // 3. Komputer ocenia propozycję
-            if (propozycja < wylosowana)
-            {
-                Console.WriteLine("ZA MAŁO");
-            }
-            else if (propozycja > wylosowana)
-            {
-                Console.WriteLine("ZA DUŻO");
-            }
-            else
-            {
-                Console.WriteLine("TRAFIONO");
-            }
+                // 2. Człowiek podaje propozycję
+                Console.Write("Podaj propozycję: ");
 
-            //koniec dopóki
+                try
+                {
+                   propozycja = Convert.ToInt32(Console.ReadLine());
+                }
+                catch(OverflowException)
+                {
+                    Console.WriteLine(  "podałeś zbyt dużą liczbę - koniec programu");
+                    break;
+                }
+
+                catch(FormatException)
+                {
+                    Console.WriteLine("pnie podałeś poprawnej liczby - koniec programu");
+                    continue;
+                }
+
+                // 3. Komputer ocenia propozycję
+                if (propozycja < wylosowana)
+                {
+                    Console.WriteLine("ZA MAŁO");
+                }
+                else if (propozycja > wylosowana)
+                {
+                    Console.WriteLine("ZA DUŻO");
+                }
+                else
+                {
+                     Console.WriteLine("TRAFIONO");
+                    trafiono = true;
+                }
+                licznik++;
+                
+
+            }//koniec dopóki
+            stopper.Stop();
 
             // 4. Zakończenie gry
+
+
+            Console.WriteLine("Koniec gry");
+            Console.WriteLine($"wykonano {licznik} ruchów");
+            Console.WriteLine($"czas gry = {stopper.Elapsed}");
         }
     }
 }
